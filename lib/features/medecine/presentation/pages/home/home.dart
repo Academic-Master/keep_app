@@ -38,9 +38,10 @@ class Home extends StatelessWidget {
                   return ListView.builder(
                       itemCount: data.medecines.length,
                       itemBuilder: (context, index) => CustomListItem(
-                            description: "description",
-                            icon: Icon(Icons.app_blocking),
-                            skin: 'Test me',
+                            dose: data.medecines[index].dose,
+                            icon: Icon(Icons.healing),
+                            name: data.medecines[index].name,
+                            strength: data.medecines[index].strength,
                           ));
                 } else if (data is IsLoadingState) {
                   return CustomLoader('Loading ...');
