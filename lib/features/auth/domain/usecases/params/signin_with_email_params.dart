@@ -1,15 +1,13 @@
 import 'package:equatable/equatable.dart';
-import 'package:keep_app/features/auth/domain/entities/user.dart';
-import 'package:keep_app/features/auth/domain/usecases/params/abstract_signin_params.dart';
 
 /// Params to pass to be logging
-class SignWithEmailParams extends Equatable implements SignInParams {
+class SignWithEmailParams extends Equatable {
   late final String email;
+  late final String username;
   late final String password;
-  late final User user;
+  final String phone = '';
 
-  SignWithEmailParams(
-      {required this.user, required this.email, required this.password});
+  SignWithEmailParams({required this.email, required this.password});
   @override
   List<Object> get props => [this.email, this.password];
 }

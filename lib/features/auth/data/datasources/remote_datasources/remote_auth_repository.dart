@@ -50,10 +50,10 @@ class RemoteAuthRepository with FireStoreRepository implements AuthRepository {
       final _credentials = await this._auth.signInWithEmailAndPassword(
           email: params.email, password: params.password);
       final _user = UserModel.factory(
-          username: _credentials.user!.displayName!,
-          phoneNumber: _credentials.user!.phoneNumber!,
-          email: _credentials.user!.email!,
-          profilePicture: _credentials.user!.photoURL!);
+        username: _credentials.user!.displayName!,
+        phoneNumber: _credentials.user!.phoneNumber!,
+        email: _credentials.user!.email!,
+      );
       return Right(_user);
     } on FirebaseAuth.FirebaseAuthException {
       return left(SignInException());
@@ -78,13 +78,13 @@ class RemoteAuthRepository with FireStoreRepository implements AuthRepository {
           codeSent: _handleSentCode,
           codeAutoRetrievalTimeout: _handleAutoRetrivalTimeOut);
       final _user = UserModel.factory(
-          username: params.user.username,
-          phoneNumber: params.user.phoneNumber,
-          email: params.user.email,
-          profilePicture: params.user.profilePicture);
+        username: params.user.username,
+        phoneNumber: params.user.phoneNumber,
+        email: params.user.email,
+      );
       final _userStore =
           await this.saveUserCredentials(_user, this._firebaseFirestore);
-      return _userStore.fold((l) => left(l), (r) => right(r));
+      return _userStore.fold((l) => left(l), (r) => right(_user));
     } on FirebaseAuth.FirebaseAuthException {
       return left(SignInException());
     } on SocketException {

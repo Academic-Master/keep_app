@@ -17,27 +17,20 @@ class User extends Equatable {
   @HiveField(2)
   late final String email;
 
-  /// User picture got from providers
-  @HiveField(3)
-  late final String profilePicture;
-
   User(
       {required String username,
       required String phoneNumber,
-      required String email,
-      required String profilePicture}) {
+      required String email}) {
     //TODO
-    if (phoneNumber.isEmpty && profilePicture.isEmpty && username.isEmpty)
+    if (username.isEmpty) {
       throw UserException();
-    else {
+    } else {
       this.phoneNumber = phoneNumber;
       this.username = username;
       this.email = email;
-      this.profilePicture = profilePicture;
     }
   }
 
   @override
-  List<String> get props =>
-      [this.phoneNumber, this.profilePicture, this.username];
+  List<String> get props => [this.phoneNumber, this.username];
 }

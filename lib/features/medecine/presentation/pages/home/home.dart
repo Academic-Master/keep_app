@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keep_app/core/widgets/custom_loader.dart';
+import 'package:keep_app/features/medecine/presentation/bloc/medecine_bloc.dart';
 import 'package:keep_app/features/medecine/presentation/widgets/custom_list_item.dart';
 
 class Home extends StatelessWidget {
@@ -27,15 +30,23 @@ class Home extends StatelessWidget {
             SizedBox(
               height: 25,
             ),
-            Expanded(
-                child: Container(
-              child: ListView.builder(
-                  itemCount: 25,
-                  itemBuilder: (context, index) => CustomListItem(
-                        description: "description",
-                        icon: Icon(Icons.app_blocking),
-                        skin: 'Test me',
-                      )),
+            Expanded(child: Container(
+              child: BlocBuilder<MedecineBloc, MedecineState>(
+                  builder: (context, data) {
+                if (data is GotMedecinesList) {
+                  print(data.medecines.map((e) => e));
+                  return ListView.builder(
+                      itemCount: data.medecines.length,
+                      itemBuilder: (context, index) => CustomListItem(
+                            description: "description",
+                            icon: Icon(Icons.app_blocking),
+                            skin: 'Test me',
+                          ));
+                } else if (data is IsLoadingState) {
+                  return CustomLoader('Loading ...');
+                }
+                return Container();
+              }),
             ))
           ],
         ),

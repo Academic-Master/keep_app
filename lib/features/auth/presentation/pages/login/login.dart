@@ -3,35 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_app/core/widgets/custom_loader.dart';
-import 'package:keep_app/features/auth/domain/entities/user.dart';
-import 'package:keep_app/features/auth/domain/usecases/params/signin_with_sms_params.dart';
 import 'package:keep_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:keep_app/features/auth/presentation/widgets/custom_button.dart';
-import 'package:keep_app/features/auth/presentation/widgets/custom_text_field.dart';
 
-class Login extends StatefulWidget {
-  @override
-  _LoginState createState() => _LoginState();
-}
+import 'sigin_with_email.dart';
+import 'sign_in_with_phone.dart';
 
-class _LoginState extends State<Login> {
-  late final TextEditingController phoneEditingController =
-      TextEditingController(text: '');
-  late final TextEditingController otpEditingController =
-      TextEditingController(text: '');
-  late final TextEditingController emailEditingController =
-      TextEditingController(text: '');
-  late final TextEditingController passwordEditingController =
-      TextEditingController(text: '');
-
+class Login extends StatelessWidget {
   final StreamController<int> _switchController = StreamController.broadcast()
     ..add(0);
-
-  @override
-  void dispose() {
-    this._switchController.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +56,8 @@ class _LoginState extends State<Login> {
                     builder: (context, data) {
                       print(data.data);
                       return data.data == 0
-                          ? _buildPhoneForm()
-                          : _buildEmailForm();
+                          ? SignInWithPhone()
+                          : SignInWithEmail();
                     })
               ],
             ),
@@ -89,7 +69,6 @@ class _LoginState extends State<Login> {
 
   _switchFormView(int index) {
     this._switchController.add(index);
-    print(index);
   }
 
   Widget _buildButtonBar(BuildContext context, int index) {
@@ -115,70 +94,4 @@ class _LoginState extends State<Login> {
           ))),
     ]);
   }
-
-  Widget _buildPhoneForm() =>
-      Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        CustomTextField(
-          fieldType: "phone",
-          icon: Icons.phone,
-          inputController: phoneEditingController,
-          label: 'Phone Number',
-        ),
-        SizedBox(
-          height: 12,
-        ),
-        CustomTextField(
-          fieldType: "OTP",
-          icon: Icons.phone,
-          inputController: otpEditingController,
-          label: 'Phone Number',
-        ),
-        CustomButton(
-          label: 'Request OTP',
-          isSelected: true,
-          withShadow: false,
-          onPressed: () async => _requestOtp(context),
-        )
-      ]);
-
-  _requestOtp(BuildContext context) async {
-    final _params = SignWithSmsParams(
-        verificationCode: 0,
-        phoneNumber: this.phoneEditingController.text,
-        user: User(
-            username: "Obed",
-            phoneNumber: this.phoneEditingController.text,
-            email: '',
-            profilePicture: ''));
-    BlocProvider.of<AuthBloc>(context)
-        .add(SignInWithSMSEvent(signInWithSMSParams: _params));
-  }
-
-  Widget _buildEmailForm() =>
-      Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        CustomTextField(
-          fieldType: "email",
-          icon: Icons.phone,
-          inputController: emailEditingController,
-          label: 'Email Number',
-        ),
-        SizedBox(
-          height: 12,
-        ),
-        CustomTextField(
-          fieldType: "text",
-          icon: Icons.lock_outline,
-          inputController: passwordEditingController,
-          label: 'Password',
-        ),
-        SizedBox(
-          height: 12,
-        ),
-        CustomButton(
-          label: 'Login',
-          isSelected: true,
-          withShadow: false,
-          onPressed: () {},
-        )
-      ]);
 }

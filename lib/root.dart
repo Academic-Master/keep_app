@@ -6,6 +6,8 @@ import 'package:keep_app/core/widgets/custom_loader.dart';
 import 'package:keep_app/dependency_injection.dart';
 import 'package:keep_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:keep_app/features/auth/presentation/pages/login/login.dart';
+import 'package:keep_app/features/medecine/presentation/bloc/medecine_bloc.dart';
+import 'package:keep_app/features/medecine/presentation/pages/home/home.dart';
 
 import 'features/auth/domain/entities/user.dart';
 
@@ -36,15 +38,26 @@ class KeepApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           FeatureAuthDependencies _featuresDependencies =
               FeatureAuthDependencies(userBox: this.userBox);
-          return BlocProvider<AuthBloc>(
-              create: (context) => _featuresDependencies.authBloc,
-              child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'Keep App',
-                theme: ThemeData.light(),
-                themeMode: ThemeMode.dark,
-                home: Login(),
-              ));
+          FeatureMedecineDependencies _medecineDependencies =
+              FeatureMedecineDependencies();
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<AuthBloc>(
+                create: (context) => _featuresDependencies.authBloc,
+              ),
+              BlocProvider<MedecineBloc>(
+                create: (context) =>
+                    _medecineDependencies.medecineBloc..add(GetMedecines()),
+              ),
+            ],
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Keep App',
+              theme: ThemeData.light(),
+              themeMode: ThemeMode.dark,
+              home: Home(),
+            ),
+          );
         }
 
         // Otherwise, show something whilst waiting for initialization to complete

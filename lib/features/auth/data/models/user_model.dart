@@ -4,29 +4,22 @@ class UserModel extends User {
   UserModel(
       {required String username,
       required String phoneNumber,
-      required String email,
-      required String profilePicture})
-      : super(
-            email: email,
-            phoneNumber: phoneNumber,
-            profilePicture: profilePicture,
-            username: username);
+      required String email})
+      : super(email: email, phoneNumber: phoneNumber, username: username);
 
   factory UserModel.factory(
           {required String username,
           required String phoneNumber,
-          required String email,
-          required String profilePicture}) =>
+          required String email}) =>
       UserModel(
-          username: username,
-          phoneNumber: phoneNumber,
-          email: email,
-          profilePicture: profilePicture);
+        username: username,
+        phoneNumber: phoneNumber,
+        email: email,
+      );
 
   Map<String, String> toJson() => {
         'username': this.username,
         'email': this.email,
         'phoneNumber': this.username,
-        'profilePicture': this.profilePicture
       };
 }
