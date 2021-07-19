@@ -1,15 +1,24 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 
 import 'entities_exception/user_exception.dart';
 
-/// User definition
+part 'user.g.dart';
 
+/// User definition
+@HiveType(typeId: 0)
 class User extends Equatable {
+  @HiveField(0)
   late final String username;
+
+  @HiveField(1)
   late final String phoneNumber;
+
+  @HiveField(2)
   late final String email;
 
   /// User picture got from providers
+  @HiveField(3)
   late final String profilePicture;
 
   User(

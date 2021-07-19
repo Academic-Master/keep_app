@@ -27,6 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthEvent event,
   ) async* {
     if (event is SignInWithEmailEvent) {
+      print('Here');
       yield IsLoadingState(message: Messages.isLoading);
       // Sigin with email
       final _response =
