@@ -51,43 +51,27 @@ class KeepApp extends StatelessWidget {
                       _medecineDependencies.medecineBloc..add(GetMedecines()),
                 ),
               ],
-              child: StreamBuilder(
-                  stream: _featuresDependencies.firebaseAuth.authStateChanges(),
-                  builder: (context, authState) {
-                    print(authState.data);
-                    if (authState.data != null) {
-                      print('Statud');
-                      return MaterialApp(
-                        debugShowCheckedModeBanner: false,
-                        title: 'Keep App',
-                        theme: ThemeData.light(),
-                        themeMode: ThemeMode.dark,
-                        initialRoute: '/home',
-                        home: Home(
+              child: MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  title: 'Keep App',
+                  theme: ThemeData.light(),
+                  themeMode: ThemeMode.dark,
+                  home: StreamBuilder(
+                      stream:
+                          _featuresDependencies.firebaseAuth.authStateChanges(),
+                      builder: (context, authState) {
+                        if (authState.hasData) {
+                          return Home(
+                            featureAuthDependencies: _featuresDependencies,
+                          );
+                        }
+                        return Login();
+                      }),
+                  routes: {
+                    '/login': (context) => Login(),
+                    '/home': (context) => Home(
                           featureAuthDependencies: _featuresDependencies,
-                        ),
-                        routes: {
-                          '/login': (context) => Login(),
-                          '/home': (context) => Home(
-                                featureAuthDependencies: _featuresDependencies,
-                              )
-                        },
-                      );
-                    } else {
-                      return MaterialApp(
-                        debugShowCheckedModeBanner: false,
-                        title: 'Keep App',
-                        theme: ThemeData.light(),
-                        themeMode: ThemeMode.dark,
-                        initialRoute: '/login',
-                        routes: {
-                          '/login': (context) => Login(),
-                          '/home': (context) => Home(
-                                featureAuthDependencies: _featuresDependencies,
-                              )
-                        },
-                      );
-                    }
+                        )
                   }));
         }
 

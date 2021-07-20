@@ -34,7 +34,7 @@ class Home extends StatelessWidget {
                 if (data.hasData && data.data!.isRight())
                   return _buildGreetings(context, data.data!);
                 return Center(
-                  child: Text('Herrer'),
+                  child: Text('An Error Occured'),
                 );
               },
             ),
