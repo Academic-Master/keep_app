@@ -1,16 +1,12 @@
 import 'package:equatable/equatable.dart';
-import 'package:keep_app/features/auth/domain/entities/user.dart';
 
 /// Params to pass to be logging
 class SignWithSmsParams extends Equatable {
   late final String phoneNumber;
   late final int verificationCode;
-  late final User user;
 
   SignWithSmsParams(
-      {required this.phoneNumber,
-      required this.verificationCode,
-      required this.user});
+      {required this.phoneNumber, required this.verificationCode});
   @override
   List<Object> get props => [];
 }

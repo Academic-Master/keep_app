@@ -15,10 +15,21 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
       TextEditingController(text: '');
   late final TextEditingController passwordEditingController =
       TextEditingController(text: '');
+  late final TextEditingController usernameEditingController =
+      TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      CustomTextField(
+        fieldType: "text",
+        icon: Icons.person,
+        inputController: usernameEditingController,
+        label: 'Username',
+      ),
+      SizedBox(
+        height: 12,
+      ),
       CustomTextField(
         fieldType: "email",
         icon: Icons.phone,
@@ -47,11 +58,14 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
   }
 
   _requestSignIn(BuildContext context) async {
-    final _params = SignWithEmailParams(
-        email: this.emailEditingController.text,
-        password: this.passwordEditingController.text);
-
-    BlocProvider.of<AuthBloc>(context)
-        .add(SignInWithEmailEvent(signWithEmailParams: _params));
+    if (this.emailEditingController.text.isNotEmpty &&
+        this.emailEditingController.text.isNotEmpty) {
+      final _params = SignWithEmailParams(
+          username: this.usernameEditingController.text,
+          email: this.emailEditingController.text,
+          password: this.passwordEditingController.text);
+      BlocProvider.of<AuthBloc>(context).add(
+          SignInWithEmailEvent(signWithEmailParams: _params, context: context));
+    }
   }
 }

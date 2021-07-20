@@ -10,7 +10,14 @@ class CustomLoader extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      color: Colors.black.withOpacity(0.2),
+      decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.2),
+          boxShadow: [
+            BoxShadow(
+                blurRadius: 10,
+                color: Colors.grey.shade100,
+                offset: Offset(1, 2))
+          ]),
       padding: EdgeInsets.all(20),
       child: Center(
           child: Container(

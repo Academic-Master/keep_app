@@ -39,6 +39,7 @@ dependencies:
   cloud_firestore: ^2.4.0
   mockito: ^5.0.10
   http: ^0.13.3
+  phone_number: ^0.11.0+1
 
 dev_dependencies:
   flutter_test:

@@ -18,12 +18,8 @@ class IsLoadingState extends AuthState {
 }
 
 class GotSignedInd extends AuthState {
-  late final User user;
-
-  GotSignedInd({required this.user});
-
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 class FailedToGetSignedIn extends AuthState {

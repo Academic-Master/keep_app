@@ -27,7 +27,7 @@ class CustomButton extends StatelessWidget {
                 ]
               : []),
       child: TextButton(
-        onPressed: this.isSelected ? this.onPressed : () {},
+        onPressed: this.onPressed,
         child: Text(
           this.label,
           style: TextStyle(color: Colors.white),

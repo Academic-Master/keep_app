@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:keep_app/core/utils/routing.dart';
 import 'package:keep_app/core/widgets/custom_loader.dart';
 import 'package:keep_app/dependency_injection.dart';
 import 'package:keep_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -55,7 +56,11 @@ class KeepApp extends StatelessWidget {
               title: 'Keep App',
               theme: ThemeData.light(),
               themeMode: ThemeMode.dark,
-              home: Home(),
+              routes: {
+                '/': (context) => Login(),
+                '/login': (context) => Home()
+              },
+              onGenerateRoute: onRouting,
             ),
           );
         }

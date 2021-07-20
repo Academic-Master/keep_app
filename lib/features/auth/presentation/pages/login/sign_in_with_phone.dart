@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:keep_app/features/auth/domain/entities/user.dart';
 import 'package:keep_app/features/auth/domain/usecases/params/signin_with_sms_params.dart';
 import 'package:keep_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:keep_app/features/auth/presentation/widgets/custom_button.dart';
@@ -49,14 +48,13 @@ class SignInWithPhoneState extends State<SignInWithPhone> {
   }
 
   _requestOtp(BuildContext context) async {
-    final _params = SignWithSmsParams(
+    if (this.phoneEditingController.text.isNotEmpty) {
+      final _params = SignWithSmsParams(
         verificationCode: 0,
         phoneNumber: this.phoneEditingController.text,
-        user: User(
-            username: "Obed",
-            phoneNumber: this.phoneEditingController.text,
-            email: ''));
-    BlocProvider.of<AuthBloc>(context)
-        .add(SignInWithSMSEvent(signInWithSMSParams: _params));
+      );
+      BlocProvider.of<AuthBloc>(context).add(
+          SignInWithSMSEvent(signInWithSMSParams: _params, context: context));
+    }
   }
 }

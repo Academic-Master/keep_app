@@ -4,14 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_app/core/widgets/custom_loader.dart';
 import 'package:keep_app/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:keep_app/features/auth/presentation/widgets/custom_button.dart';
-
+import 'package:keep_app/features/medecine/presentation/pages/home/home.dart';
 import 'sigin_with_email.dart';
-import 'sign_in_with_phone.dart';
 
-class Login extends StatelessWidget {
-  final StreamController<int> _switchController = StreamController.broadcast()
-    ..add(0);
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final StreamController<int> _switchController = StreamController.broadcast();
+  String email = '';
+
+  @override
+  void dispose() {
+    this._switchController.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +34,7 @@ class Login extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 15),
             padding: const EdgeInsets.all(25.0),
-            height: 430,
+            height: 470,
             decoration: BoxDecoration(boxShadow: [
               BoxShadow(
                   color: Colors.pink[50]!, offset: Offset(1, 2), blurRadius: 7)
@@ -41,24 +50,18 @@ class Login extends StatelessWidget {
                 SizedBox(
                   height: 15,
                 ),
-                StreamBuilder<int>(
-                    initialData: 0,
-                    stream: this._switchController.stream,
-                    builder: (context, data) {
-                      return _buildButtonBar(context, data.data!);
-                    }),
-                SizedBox(
-                  height: 25,
-                ),
-                StreamBuilder<int>(
-                    initialData: 0,
-                    stream: this._switchController.stream,
-                    builder: (context, data) {
-                      print(data.data);
-                      return data.data == 0
-                          ? SignInWithPhone()
-                          : SignInWithEmail();
-                    })
+                BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+                  if (state is IsLoadingState)
+                    showDialog(
+                        context: context,
+                        builder: (context) => CustomLoader('Loading ...'));
+                  else if (state is GotSignedInd) {
+                    print('Here man');
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Home()));
+                  }
+                  return SignInWithEmail();
+                })
               ],
             ),
           ),
@@ -67,31 +70,38 @@ class Login extends StatelessWidget {
     );
   }
 
-  _switchFormView(int index) {
-    this._switchController.add(index);
+  _setEmail(String email) {
+    this.setState(() {
+      this.email = email;
+    });
   }
 
-  Widget _buildButtonBar(BuildContext context, int index) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      Container(
-          width: MediaQuery.of(context).size.width * .35,
-          height: 40,
-          child: SizedBox.expand(
-              child: CustomButton(
-                  label: 'Email',
-                  withShadow: false,
-                  onPressed: () => _switchFormView(1),
-                  isSelected: index == 1 ? true : false))),
-      Container(
-          width: MediaQuery.of(context).size.width * .35,
-          height: 40,
-          child: SizedBox.expand(
-              child: CustomButton(
-            isSelected: index == 0 ? true : false,
-            withShadow: true,
-            label: 'Phone',
-            onPressed: () => _switchFormView(0),
-          ))),
-    ]);
-  }
+  // _switchFormView(int index) {
+  //   this._switchController.add(index);
+  // }
+
+  // Widget _buildButtonBar(BuildContext context, int index) {
+  //   return Flex(direction: Axis.horizontal, children: [
+  //     Expanded(
+  //       flex: 1,
+  //       child: CustomButton(
+  //           label: 'Email',
+  //           withShadow: false,
+  //           onPressed: () => _switchFormView(1),
+  //           isSelected: index == 1 ? true : false),
+  //     ),
+  //     SizedBox(
+  //       width: 7,
+  //     ),
+  //     Expanded(
+  //       flex: 1,
+  //       child: CustomButton(
+  //         isSelected: index == 0 ? true : false,
+  //         withShadow: true,
+  //         label: 'Phone',
+  //         onPressed: () => _switchFormView(0),
+  //       ),
+  //     )
+  //   ]);
+  // }
 }

@@ -45,7 +45,7 @@ class LocalAuthRepositoryImpl implements LocalAuthRepository {
         await _box.put(_userKey, user);
         return right(SuccessOperation());
       }
-      return left(LocalDatabaseException(error: 'USER ALREADY EXIST'));
+      return right(SuccessOperation());
     } catch (e) {
       return left(LocalDatabaseException(error: e.toString()));
     }

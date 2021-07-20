@@ -25,8 +25,8 @@ class Home extends StatelessWidget {
             Text('Get medecine results',
                 style: Theme.of(context)
                     .textTheme
-                    .headline6
-                    ?.copyWith(fontWeight: FontWeight.w800, fontSize: 18)),
+                    .headline5
+                    ?.copyWith(fontWeight: FontWeight.w800)),
             SizedBox(
               height: 25,
             ),
@@ -44,6 +44,7 @@ class Home extends StatelessWidget {
                             strength: data.medecines[index].strength,
                           ));
                 } else if (data is IsLoadingState) {
+                  print('Hemm');
                   return CustomLoader('Loading ...');
                 }
                 return Container();
@@ -64,10 +65,10 @@ class Home extends StatelessWidget {
                     text: 'Obed 🖖',
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .headline5
                         ?.copyWith(fontWeight: FontWeight.bold))
               ],
-              style: Theme.of(context).textTheme.headline6),
+              style: Theme.of(context).textTheme.headline5),
           // style: Theme.of(context).textTheme.headline6,
         )
       : Text.rich(
@@ -76,12 +77,13 @@ class Home extends StatelessWidget {
               children: [
                 TextSpan(
                     text: 'Obed 🖖',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(fontWeight: FontWeight.bold))
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                        fontWeight: FontWeight.bold, color: Colors.black))
               ],
-              style: Theme.of(context).textTheme.headline6),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline5
+                  ?.copyWith(color: Colors.black)),
           // style: Theme.of(context).textTheme.headline6,
         );
 }
