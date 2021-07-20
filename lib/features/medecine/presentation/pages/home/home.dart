@@ -91,9 +91,30 @@ class Home extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline5),
               // style: Theme.of(context).textTheme.headline6,
             )
-          : Text.rich(
-              TextSpan(
-                  text: 'Good Morning \n',
+          : (DateTime.now().hour <= 12 && DateTime.now().hour >= 0)
+              ? Text.rich(
+                  TextSpan(
+                      text: 'Good Morning \n',
+                      children: [
+                        TextSpan(
+                            text:
+                                '${data.fold((l) => null, (r) => r)!.username} 🖖\n${data.fold((l) => null, (r) => r)!.email}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6
+                                ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    fontSize: 11))
+                      ],
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(color: Colors.black)),
+                  // style: Theme.of(context).textTheme.headline6,
+                )
+              : TextSpan(
+                  text: 'Good Evening \n',
                   children: [
                     TextSpan(
                         text:
@@ -106,7 +127,5 @@ class Home extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .headline5
-                      ?.copyWith(color: Colors.black)),
-              // style: Theme.of(context).textTheme.headline6,
-            );
+                      ?.copyWith(color: Colors.black));
 }
