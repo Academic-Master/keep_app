@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:validators/validators.dart';
 
 class CustomTextField extends StatelessWidget {
+  late final bool isObscure;
   late final String label;
   late final IconData icon;
   late final TextEditingController inputController;
@@ -12,6 +14,7 @@ class CustomTextField extends StatelessWidget {
       {required this.label,
       required this.fieldType,
       required this.icon,
+      this.isObscure: false,
       required this.inputController});
 
   @override
@@ -30,9 +33,13 @@ class CustomTextField extends StatelessWidget {
         ),
         Container(
           child: TextFormField(
-            validator: (value) =>
-                value!.isEmpty ? 'Entrer your ${this.label}' : null,
+            validator: (value) => value!.isNotEmpty
+                ? !isEmail(value) && this.fieldType == 'email'
+                    ? 'Entrer a valid ${this.label}'
+                    : null
+                : 'Field this field',
             controller: this.inputController,
+            obscureText: this.isObscure,
             keyboardType: textFieldType,
             decoration: InputDecoration(
                 prefixIcon: Padding(
@@ -41,6 +48,10 @@ class CustomTextField extends StatelessWidget {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(width: 1.5, color: Colors.grey),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1.5, color: Colors.red),
                   borderRadius: BorderRadius.circular(50),
                 ),
                 focusedBorder: OutlineInputBorder(

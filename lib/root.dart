@@ -42,31 +42,58 @@ class KeepApp extends StatelessWidget {
           FeatureMedecineDependencies _medecineDependencies =
               FeatureMedecineDependencies();
           return MultiBlocProvider(
-            providers: [
-              BlocProvider<AuthBloc>(
-                create: (context) => _featuresDependencies.authBloc,
-              ),
-              BlocProvider<MedecineBloc>(
-                create: (context) =>
-                    _medecineDependencies.medecineBloc..add(GetMedecines()),
-              ),
-            ],
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Keep App',
-              theme: ThemeData.light(),
-              themeMode: ThemeMode.dark,
-              routes: {
-                '/': (context) => Login(),
-                '/login': (context) => Home()
-              },
-              onGenerateRoute: onRouting,
-            ),
-          );
+              providers: [
+                BlocProvider<AuthBloc>(
+                  create: (context) => _featuresDependencies.authBloc,
+                ),
+                BlocProvider<MedecineBloc>(
+                  create: (context) =>
+                      _medecineDependencies.medecineBloc..add(GetMedecines()),
+                ),
+              ],
+              child: StreamBuilder(
+                  stream: _featuresDependencies.firebaseAuth.authStateChanges(),
+                  builder: (context, authState) {
+                    print(authState.data);
+                    if (authState.data != null) {
+                      print('Statud');
+                      return MaterialApp(
+                        debugShowCheckedModeBanner: false,
+                        title: 'Keep App',
+                        theme: ThemeData.light(),
+                        themeMode: ThemeMode.dark,
+                        initialRoute: '/home',
+                        home: Home(
+                          featureAuthDependencies: _featuresDependencies,
+                        ),
+                        routes: {
+                          '/login': (context) => Login(),
+                          '/home': (context) => Home(
+                                featureAuthDependencies: _featuresDependencies,
+                              )
+                        },
+                      );
+                    } else {
+                      return MaterialApp(
+                        debugShowCheckedModeBanner: false,
+                        title: 'Keep App',
+                        theme: ThemeData.light(),
+                        themeMode: ThemeMode.dark,
+                        initialRoute: '/login',
+                        routes: {
+                          '/login': (context) => Login(),
+                          '/home': (context) => Home(
+                                featureAuthDependencies: _featuresDependencies,
+                              )
+                        },
+                      );
+                    }
+                  }));
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           home: Scaffold(
             body: CustomLoader('Loading ...'),
           ),

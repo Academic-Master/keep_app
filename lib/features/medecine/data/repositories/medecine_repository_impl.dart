@@ -29,7 +29,7 @@ class MedecineRepostoryImpl implements MedecineRepository {
           ((element.value as List)[0] as Map<String, dynamic>)
               .entries
               .forEach((element) {
-            ((element.value as List)[0] as Map<String, dynamic>)
+            ((element.value)[0] as Map<String, dynamic>)
                 .entries
                 .forEach((element) {
               ((element.value as List)[0] as Map<String, dynamic>)

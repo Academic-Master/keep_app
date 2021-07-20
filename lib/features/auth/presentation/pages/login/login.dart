@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_app/core/widgets/custom_loader.dart';
 import 'package:keep_app/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:keep_app/features/medecine/presentation/pages/home/home.dart';
 import 'sigin_with_email.dart';
 
 class Login extends StatefulWidget {
@@ -34,7 +33,7 @@ class _LoginState extends State<Login> {
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 15),
             padding: const EdgeInsets.all(25.0),
-            height: 470,
+            height: MediaQuery.of(context).size.height * .8,
             decoration: BoxDecoration(boxShadow: [
               BoxShadow(
                   color: Colors.pink[50]!, offset: Offset(1, 2), blurRadius: 7)
@@ -56,9 +55,7 @@ class _LoginState extends State<Login> {
                         context: context,
                         builder: (context) => CustomLoader('Loading ...'));
                   else if (state is GotSignedInd) {
-                    print('Here man');
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Home()));
+                    Navigator.pushReplacementNamed(context, '/home');
                   }
                   return SignInWithEmail();
                 })
@@ -69,39 +66,4 @@ class _LoginState extends State<Login> {
       }),
     );
   }
-
-  _setEmail(String email) {
-    this.setState(() {
-      this.email = email;
-    });
-  }
-
-  // _switchFormView(int index) {
-  //   this._switchController.add(index);
-  // }
-
-  // Widget _buildButtonBar(BuildContext context, int index) {
-  //   return Flex(direction: Axis.horizontal, children: [
-  //     Expanded(
-  //       flex: 1,
-  //       child: CustomButton(
-  //           label: 'Email',
-  //           withShadow: false,
-  //           onPressed: () => _switchFormView(1),
-  //           isSelected: index == 1 ? true : false),
-  //     ),
-  //     SizedBox(
-  //       width: 7,
-  //     ),
-  //     Expanded(
-  //       flex: 1,
-  //       child: CustomButton(
-  //         isSelected: index == 0 ? true : false,
-  //         withShadow: true,
-  //         label: 'Phone',
-  //         onPressed: () => _switchFormView(0),
-  //       ),
-  //     )
-  //   ]);
-  // }
 }

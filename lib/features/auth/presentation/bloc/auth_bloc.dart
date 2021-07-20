@@ -35,7 +35,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield _response.fold((l) {
         return FailedToGetSignedIn(exception: l);
       }, (r) {
-        Navigator.pushReplacementNamed(event.context, '/login');
         return GotSignedInd();
       });
     } else if (event is SignInWithSMSEvent) {

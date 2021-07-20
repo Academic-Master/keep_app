@@ -1,10 +1,19 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keep_app/core/exceptions/local_database_exception.dart';
 import 'package:keep_app/core/widgets/custom_loader.dart';
+import 'package:keep_app/features/auth/domain/entities/user.dart';
 import 'package:keep_app/features/medecine/presentation/bloc/medecine_bloc.dart';
 import 'package:keep_app/features/medecine/presentation/widgets/custom_list_item.dart';
 
+import '../../../../../dependency_injection.dart';
+
 class Home extends StatelessWidget {
+  late final FeatureAuthDependencies featureAuthDependencies;
+
+  Home({required this.featureAuthDependencies});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +27,17 @@ class Home extends StatelessWidget {
             SizedBox(
               height: 50,
             ),
-            _buildGreetings(context),
+            FutureBuilder<Either<LocalDatabaseException, User>>(
+              future:
+                  this.featureAuthDependencies.localAuthRepository.getUser(),
+              builder: (context, data) {
+                if (data.hasData && data.data!.isRight())
+                  return _buildGreetings(context, data.data!);
+                return Center(
+                  child: Text('Herrer'),
+                );
+              },
+            ),
             SizedBox(
               height: 40,
             ),
@@ -56,34 +75,38 @@ class Home extends StatelessWidget {
     );
   }
 
-  _buildGreetings(BuildContext context) => (DateTime.now().hour > 12)
-      ? Text.rich(
-          TextSpan(
-              text: 'Good Afternoon \n',
-              children: [
-                TextSpan(
-                    text: 'Obed 🖖',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline5
-                        ?.copyWith(fontWeight: FontWeight.bold))
-              ],
-              style: Theme.of(context).textTheme.headline5),
-          // style: Theme.of(context).textTheme.headline6,
-        )
-      : Text.rich(
-          TextSpan(
-              text: 'Good Morning \n',
-              children: [
-                TextSpan(
-                    text: 'Obed 🖖',
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
-                        fontWeight: FontWeight.bold, color: Colors.black))
-              ],
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5
-                  ?.copyWith(color: Colors.black)),
-          // style: Theme.of(context).textTheme.headline6,
-        );
+  _buildGreetings(
+          BuildContext context, Either<LocalDatabaseException, User> data) =>
+      (DateTime.now().hour > 12)
+          ? Text.rich(
+              TextSpan(
+                  text: 'Good Afternoon \n',
+                  children: [
+                    TextSpan(
+                        text:
+                            '${data.fold((l) => null, (r) => r)!.username} 🖖',
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                            fontWeight: FontWeight.bold, fontSize: 11))
+                  ],
+                  style: Theme.of(context).textTheme.headline5),
+              // style: Theme.of(context).textTheme.headline6,
+            )
+          : Text.rich(
+              TextSpan(
+                  text: 'Good Morning \n',
+                  children: [
+                    TextSpan(
+                        text:
+                            '${data.fold((l) => null, (r) => r)!.username} 🖖\n${data.fold((l) => null, (r) => r)!.email}',
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 11))
+                  ],
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline5
+                      ?.copyWith(color: Colors.black)),
+              // style: Theme.of(context).textTheme.headline6,
+            );
 }
